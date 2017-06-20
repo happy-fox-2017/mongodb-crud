@@ -96,25 +96,37 @@ methods.update = function(req, res){
         error: err
       })
     } else {
-      dbase.collection('books').updateOne({
+      dbase.collection('books').findOne({
         _id: ObjectID(req.params.id)
-      }, {
-        $set: {
-          isbn: req.body.isbn,
-          title: req.body.title,
-          author: req.params.author,
-          category: req.params.category,
-          stock: Number(req.body.stock)
-        }
-      }, {new: true}, (err, result)=>{
+      }, (err, data)=>{
         if(err){
           res.status(400).send({
-            msg: 'something wrong while querying data',
+            msg: 'something wrong while getting data',
             error: err
           })
         } else {
-          res.status(200).send(result)
-          dbase.close()
+          //console.log('ini isi dari data[0]', data);
+          dbase.collection('books').updateOne({
+            _id: ObjectID(req.params.id)
+          }, {
+            $set: {
+              isbn: req.body.isbn || data.isbn,
+              title: req.body.title || data.title,
+              author: req.body.author || data.author,
+              category: req.body.category || data.category,
+              stock: Number(req.body.stock) || data.stock
+            }
+          }, {new: true}, (err, result)=>{
+            if(err){
+              res.status(400).send({
+                msg: 'something wrong while querying data',
+                error: err
+              })
+            } else {
+              res.status(200).send(result)
+              dbase.close()
+            }
+          })
         }
       })
     }
