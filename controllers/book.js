@@ -61,6 +61,7 @@ methods.show = function(req, res){
     }
   })
 }
+
 methods.showOne = function(req, res){
   db.connect(url, (err, dbase)=>{
     if(err){
@@ -80,15 +81,46 @@ methods.showOne = function(req, res){
           })
         } else {
           res.status(200).send(result)
+          dbase.close()
         }
       })
     }
   })
 }
-// methods.update = function(req, res){
-//   db.connect(url, (err, dbase)=>{
-//     if(err){
-//       res.status(500)
-//     }
-//   })
-// }
+
+methods.update = function(req, res){
+  db.connect(url, (err, dbase)=>{
+    if(err){
+      res.status(500).send({
+        msg: 'something wrong while connecting to database',
+        error: err
+      })
+    } else {
+      db.collection('books').updateOne({
+        _id: ObjectID(req.params.id)
+      }, {
+        $set: {
+          isbn: req.body.isbn,
+          title: req.body.title,
+          author: req.params.author,
+          category: req.params.category,
+          stock: Number(req.body.stock)
+        }
+      }, {new: true}, (err, result)=>{
+        if(err){
+          res.status(400).send({
+            msg: 'something wrong while querying data',
+            error: err
+          })
+        } else {
+          res.status(200).send(result)
+          dbase.close()
+        }
+      })
+    }
+  })
+}
+
+methods.delete = function(req, res){
+  db.connect(url, (err, dbase)=>)
+}
