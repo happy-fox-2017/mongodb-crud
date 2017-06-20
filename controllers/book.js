@@ -39,28 +39,28 @@ methods.create = function(req, res){
   })
 }
 
-// methods.show = function(req, res){
-//   db.connect(url, (err, dbase)=>{
-//     if(err){
-//       res.status(500).send({
-//         msg: 'something wrong with connection',
-//         error: err
-//       })
-//     } else {
-//       db.collection('books').find({}).toArray((err, result)=>{
-//         if(err){
-//           res.status(400).send({
-//             msg: 'something wrong while querying data',
-//             error: err
-//           })
-//         } else {
-//           res.status(200).send(result)
-//           dbase.close()
-//         }
-//       })
-//     }
-//   })
-// }
+methods.show = function(req, res){
+  db.connect(url, (err, dbase)=>{
+    if(err){
+      res.status(500).send({
+        msg: 'something wrong with connection',
+        error: err
+      })
+    } else {
+      db.collection('books').find({}).toArray((err, result)=>{
+        if(err){
+          res.status(400).send({
+            msg: 'something wrong while querying data',
+            error: err
+          })
+        } else {
+          res.status(200).send(result)
+          dbase.close()
+        }
+      })
+    }
+  })
+}
 // methods.showOne = function(req, res){
 //   db.connect(url, (err, dbase)=>{
 //     if(err){
