@@ -118,11 +118,29 @@ let findByID = function (req,res) {
   });
 };
 
+let DeleteData = function (req,res) {
+  MongoClient.connect(url,function (err,db) {
+      if(err){
+          res.status(503).send("Something Wrong With Your Connection Database");
+      } else {
+          db.collection("books").removeOne({_id : ObjectID(req.params._id)}, function(err, result) {
+              if(err){
+                  res.status(501).send("Something Wrong with your delete"+err);
+              } else {
+                  res.send(result);
+                  db.close();
+              }
+          });
+      }
+  })
+};
+
 module.exports = {
     CreateDatabase,
     CreateTable,
     InsertData,
     UpdateData,
     findAllData,
-    findByID
+    findByID,
+    DeleteData
 };

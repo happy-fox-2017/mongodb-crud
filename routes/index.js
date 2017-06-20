@@ -6,7 +6,9 @@ var Student = require('../controller/cStudents');
 router.post('/api/createDatabase', Student.CreateDatabase);
 router.post('/api/books/createTable', Student.CreateTable);
 router.post('/api/books/insertData', Student.InsertData);
-router.post('/api/books/:_id', Student.UpdateData);
+router.put('/api/books/:_id', Student.UpdateData);
+router.delete('/api/books/:_id', Student.DeleteData);
+
 router.get('/api/books/', Student.findAllData);
 router.get('/api/books/:_id', Student.findByID);
 
