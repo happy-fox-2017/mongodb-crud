@@ -4,7 +4,7 @@ const db = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 const url = 'mongodb://localhost:27017/library2';
 
-var methodes = {};
+var methods = {};
 
 methods.create = function(req, res){
   db.connect(url, (err, dbase)=>{
@@ -15,7 +15,7 @@ methods.create = function(req, res){
       })
     } else {
       let body = req.body
-      db.collection('books').insertOne({
+      dbase.collection('books').insertOne({
         isbn: body.isbn,
         title: body.title,
         author: body.author,
@@ -47,7 +47,7 @@ methods.show = function(req, res){
         error: err
       })
     } else {
-      db.collection('books').find({}).toArray((err, result)=>{
+      dbase.collection('books').find({}).toArray((err, result)=>{
         if(err){
           res.status(400).send({
             msg: 'something wrong while querying data',
@@ -70,7 +70,7 @@ methods.showOne = function(req, res){
         error: err
       })
     } else {
-      db.collection('books').find({
+      dbase.collection('books').find({
         _id: ObjectID(req.params.id)
       })
       .toArray((err, result)=>{
@@ -96,7 +96,7 @@ methods.update = function(req, res){
         error: err
       })
     } else {
-      db.collection('books').updateOne({
+      dbase.collection('books').updateOne({
         _id: ObjectID(req.params.id)
       }, {
         $set: {
@@ -129,7 +129,7 @@ methods.delete = function(req, res){
         error: err
       })
     } else {
-      db.collection('books').deleteOne({
+      dbase.collection('books').deleteOne({
         _id: ObjectID(req.params.id)
       }, (err, result)=>{
         if(err){
