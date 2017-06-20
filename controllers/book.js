@@ -61,30 +61,30 @@ methods.show = function(req, res){
     }
   })
 }
-// methods.showOne = function(req, res){
-//   db.connect(url, (err, dbase)=>{
-//     if(err){
-//       res.status(500).send({
-//         msg: 'something wrong while connecting to database',
-//         error: err
-//       })
-//     } else {
-//       db.collection('books').find({
-//         _id: ObjectID(req.params.id)
-//       })
-//       .toArray((err, result)=>{
-//         if(err){
-//           res.status(400).send({
-//             msg: 'something wrong while querying data',
-//             error: err
-//           })
-//         } else {
-//           res.status(200).send(result)
-//         }
-//       })
-//     }
-//   })
-// }
+methods.showOne = function(req, res){
+  db.connect(url, (err, dbase)=>{
+    if(err){
+      res.status(500).send({
+        msg: 'something wrong while connecting to database',
+        error: err
+      })
+    } else {
+      db.collection('books').find({
+        _id: ObjectID(req.params.id)
+      })
+      .toArray((err, result)=>{
+        if(err){
+          res.status(400).send({
+            msg: 'something wrong while querying data',
+            error: err
+          })
+        } else {
+          res.status(200).send(result)
+        }
+      })
+    }
+  })
+}
 // methods.update = function(req, res){
 //   db.connect(url, (err, dbase)=>{
 //     if(err){
