@@ -45,6 +45,11 @@ let deleteBook = (req, res) => {
     }
     db.collection('book').remove({
       '_id': ObjectId(req.params.id)
+    }, function(err, data) {
+      if (err) {
+        res.send(err)
+      }
+      res.send(data)
     })
   })
 }

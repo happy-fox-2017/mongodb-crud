@@ -8,7 +8,7 @@ router.post('/books', conn.createBook)
 
 router.put('/books/:id', conn.updateBook)
 
-router.delete('books/:id', conn.deleteBook)
+router.delete('/books/:id', conn.deleteBook)
 
 
 

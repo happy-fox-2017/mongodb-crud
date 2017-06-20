@@ -18,4 +18,3 @@ app.use('/', index)
 app.listen(3000, () => {
   console.log('server connected');
 })
-module.exports = app;
