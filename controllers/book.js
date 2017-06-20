@@ -122,5 +122,28 @@ methods.update = function(req, res){
 }
 
 methods.delete = function(req, res){
-  db.connect(url, (err, dbase)=>)
+  db.connect(url, (err, dbase)=>{
+    if(err){
+      res.status(500).send({
+        msg: 'something wrong while connecting to database',
+        error: err
+      })
+    } else {
+      db.collection('books').deleteOne({
+        _id: ObjectID(req.params.id)
+      }, (err, result)=>{
+        if(err){
+          res.status(400).send({
+            msg: 'something wrong while querying data',
+            error: err
+          })
+        } else {
+          res.status(200).send(result)
+          dbase.close()
+        }
+      })
+    }
+  })
 }
+
+module.exports = methods;
