@@ -4,8 +4,8 @@ var bookController = require('../controllers/bookController')
 
 /* GET users listing. */
 router.get('/', bookController.getAll);
-router.get('/:id', bookController.getOne);
 router.post('/', bookController.create);
+router.get('/:id', bookController.getOne);
 router.put('/:id', bookController.update);
 router.delete('/:id', bookController.remove);
 

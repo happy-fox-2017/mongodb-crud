@@ -1,16 +1,17 @@
 
 var MongoClient = require('mongodb').MongoClient
 var ObjectID = require('mongodb').ObjectID
-
+var theCollection = "books"
 var url = 'mongodb://localhost:27017/library'
+var status = 400
+var body = "error 404"
 
 var getAll = (req,res) => {
   MongoClient.connect(url, (err,db) => {
     console.log('connect to server');
-    db.collection('books').find({}, (err, books) => {
-      books.forEach(book => {
-        res.json(book);
-      })
+    if (err) {res.send(err)}
+    db.collection(theCollection).find({}).toArray((err, books) => {
+      res.send(books);
     })
     db.close()
   })
@@ -26,8 +27,8 @@ var getOne = (req,res) => {
         $regex : /puj/i
       }
     }
-    db.collection('books').findOne(query, (err, book) => {
-      if (err) throw err
+    db.collection(theCollection).findOne(queryId, (err, book) => {
+      if (err) res.status(status).send(body)
       res.json(book);
     })
     db.close()
@@ -37,14 +38,14 @@ var getOne = (req,res) => {
 var create = (req,res) => {
   MongoClient.connect(url, (err,db) => {
     console.log('connect to server');
-    db.collection('books').insertOne({
-      "isbn" : "978-1-60309-666",
-      "title" : "Nafkah kamu nafkah aku juga",
-      "author" : "Penyair",
-      "catergory" : "Fiksi Kamu",
-      "stock" : 5
+    db.collection(theCollection).insertOne({
+      "isbn" : req.body.isbn,
+      "title" : req.body.title,
+      "author" : req.body.author,
+      "category" : req.body.category,
+      "stock" : req.body.stock
     }, (err, row) => {
-      if (err) {throw err}
+      if (err) res.status(status).send(req.body)
       else {res.send(row)}
     })
     db.close()
@@ -59,9 +60,15 @@ var update = (req,res) => {
     }
     console.log('connect to server success');
     let query = {_id : ObjectID(req.params.id)}
-    let newValues = {title : 'Pujangga mencari cinta kamu', author : 'Aku dan kamu'}
-    db.collection('books').update(query, newValues, (err,book) => {
-      if (err) throw err
+    let newValues = {
+      "isbn" : req.body.isbn,
+      "title" : req.body.title,
+      "author" : req.body.author,
+      "category" : req.body.category,
+      "stock" : req.body.stock
+    }
+    db.collection(theCollection).update(query, newValues, (err,book) => {
+      if (err) res.status(status).send(body)
       res.send(book.result.nModified + "record updated");
       db.close()
     })
@@ -74,8 +81,8 @@ var remove = (req,res) => {
     let query = {_id : id}
     if (err) throw err
     console.log(`Connected to server`);
-    db.collection('books').remove(query, (err, book) => {
-      if (err) throw err
+    db.collection(theCollection).remove(query, (err, book) => {
+      if (err) res.status(status).send(body)
       res.send(book.result.n + "deleted");
       db.close()
     })
