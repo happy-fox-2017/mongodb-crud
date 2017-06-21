@@ -12,4 +12,8 @@ router.get('/', (req, res) => {
   bookController.findAll(req, res);
 });
 
+router.put('/:isbn', (req, res) => {
+  bookController.update(req, res);
+});
+
 module.exports = router;

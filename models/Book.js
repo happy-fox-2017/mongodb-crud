@@ -3,6 +3,12 @@ const COLLECTION_NAME = 'books';
 class Book {
 
   constructor(options) {
+    if (Object.prototype.hasOwnProperty.call(options, '_id')) {
+      this._id = options._id;
+    } else {
+      this._id = null;
+    }
+
     this.isbn = options.isbn;
     this.title = options.title;
     this.author = options.author;
@@ -18,9 +24,27 @@ class Book {
   }
 
   save(db, callback) {
-    db.collection(COLLECTION_NAME).insertOne(this, (insertErr, result) => {
-      if (insertErr) throw insertErr;
-      callback(result);
+    const id = this._id;
+    delete this._id;
+
+    if (id) {
+      db.collection(COLLECTION_NAME).update({ _id: id }, this, (updateErr, result) => {
+        if (updateErr) throw updateErr;
+        callback(result);
+      });
+    } else {
+      db.collection(COLLECTION_NAME).insertOne(this, (insertErr, result) => {
+        if (insertErr) throw insertErr;
+        callback(result);
+      });
+    }
+  }
+
+  static findByIsbn(db, isbn, callback) {
+    db.collection(COLLECTION_NAME).findOne({ isbn }, (errFind, result) => {
+      if (errFind) throw errFind;
+      const book = new Book(result);
+      callback(book);
     });
   }
 }
