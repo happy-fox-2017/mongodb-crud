@@ -4,16 +4,12 @@ const router = express.Router();
 
 const bookController = require('../controllers/books');
 
-router.post('/', (req, res) => {
-  bookController.create(req, res);
-});
+router.post('/', bookController.create);
 
-router.get('/', (req, res) => {
-  bookController.findAll(req, res);
-});
+router.get('/', bookController.findAll);
 
-router.put('/:isbn', (req, res) => {
-  bookController.update(req, res);
-});
+router.put('/:isbn', bookController.update);
+
+router.delete('/:isbn', bookController.delete);
 
 module.exports = router;

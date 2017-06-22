@@ -47,6 +47,13 @@ class Book {
       callback(book);
     });
   }
+
+  static remove(db, isbn, callback) {
+    db.collection(COLLECTION_NAME).deleteOne({ isbn }, (errRemove, result) => {
+      if (errRemove) throw errRemove;
+      callback();
+    });
+  }
 }
 
 module.exports = Book;

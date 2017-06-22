@@ -29,3 +29,11 @@ exports.update = (req, res) => {
     });
   });
 };
+
+exports.delete = (req, res) => {
+  const db = req.app.locals.db;
+  const isbn = req.params.isbn;
+  Book.remove(db, isbn, () => {
+    res.send({ result: 'DELETE_OK' });
+  });
+};
